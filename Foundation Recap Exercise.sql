@@ -23,6 +23,16 @@ c) only the Surgery wards
 
 -- Write the SQL statement here
 
+--1 - 4
+SELECT PatientId, AdmittedDate, DischargeDate, Hospital, Ward,
+DATEDIFF(DAY, AdmittedDate, DischargeDate) + 1 AS LengthOfStay
+FROM PatientStay ps
+WHERE hospital IN ('PRUH','Oxleas')
+AND AdmittedDate BETWEEN '2024-02-01' AND '2024-02-29'
+AND Ward LIKE '%Surgery%'
+ORDER BY AdmittedDate DESC, PatientId DESC 
+
+
 
 /*
 5. How many patients has each hospital admitted? 
@@ -32,4 +42,23 @@ c) only the Surgery wards
 */
 
 -- Write the SQL statement here
+--5
+SELECT Hospital,
+COUNT(PatientID) AS Number_Patients
+FROM PatientStay
+WHERE AdmittedDate IS NOT NULL
+GROUP BY Hospital
 
+--6
+SELECT Hospital,
+SUM(Tariff) AS Total_Tariff
+FROM PatientStay
+GROUP BY Hospital
+
+--7 & 8
+SELECT Hospital,
+COUNT(PatientID) AS Number_Patients
+FROM PatientStay
+GROUP BY Hospital
+HAVING COUNT(PatientID) >= 10
+ORDER BY Number_Patients DESC
